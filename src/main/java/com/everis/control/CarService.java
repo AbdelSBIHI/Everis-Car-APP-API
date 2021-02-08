@@ -2,12 +2,14 @@ package com.everis.control;
 
 
 import java.util.List;
+
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import com.everis.control.CarService;
 import com.everis.entity.Car;
 
-
+@Stateless
 public class CarService {
 
     @PersistenceContext(unitName = "car-unit")
