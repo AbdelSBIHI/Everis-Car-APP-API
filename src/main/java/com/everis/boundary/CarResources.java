@@ -12,11 +12,6 @@ import com.everis.boundary.CarResources;
 import com.everis.control.CarService;
 import com.everis.entity.Car;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 
 @Path("cars")
@@ -24,49 +19,60 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 @Produces(MediaType.APPLICATION_JSON)
 public class CarResources {
 
+    CarService carService = new CarService() ;
     
-    CarService carService = new CarService();
+    private final static Logger LOGGER = Logger.getLogger(CarResources.class);
 
     @GET
     public Response getCars() {
-    		
+    		LOGGER.info("Retrieving Car's List from car service: ");
     	try {
     		List<Car> cars = carService.getCars();
+			LOGGER.info("Car's list retrieved");
 			return Response.ok().entity(cars).build();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.NOT_FOUND).build();
-		}   	
+			LOGGER.info("Car's list not found");
+      }
     }
 
     @GET
     @Path("/{id}")
     public Response getCarById(final @PathParam("id") int id)
     {		
+
+    		LOGGER.info("Getting Car by its Id: " + id);
 	    try {
 			return Response.ok().entity(carService.getCar(id)).build();
 		} catch (Exception e) {
+			LOGGER.error("Car with id : " + id + " Not Found");
 			 return Response.status(Status.NOT_FOUND).build();
 		}
     }
+
     @POST
     public Response createCar(final Car car) {
+    		LOGGER.info("Creating new Car: ");
     	try {
+			LOGGER.info("new car created: "+car);
 			return Response.status(Status.CREATED).entity(carService.createCar(car)).build();
 		} catch (Exception e) {
-		    return Response.status(Status.BAD_REQUEST).build();
-		}
-	}    
-
+			LOGGER.error("Failed to create new car");
+    }
+    }
+  
     @PUT
     @Path("/{id}")
     public Response updateCar(final @PathParam("id") int id) {
     	
+      LOGGER.info("Update new car!");
     	try {
 			Car newCar = this.carService.getCar(id);
 			this.carService.updateCar(newCar);
+      LOGGER.info("Car Successfully Updated: " + newCar + "Id: " + id);
 			return Response.status(Status.OK).entity(newCar).build();
 		} catch (Exception e) {
+      LOGGER.error("Error: Car not found!");
 			return Response.status(Status.NOT_FOUND).build();			
 		}	  
     }
@@ -74,12 +80,15 @@ public class CarResources {
     @DELETE
     @Path("/{id}")
     public Response deleteCar(final @PathParam("id") int id) {
+    		LOGGER.info("Deleting car with id:"+id);
 	    try {
 			this.carService.deleteCar(id);
+			LOGGER.info("Car with id " + id + " Deleted");
 			return Response.ok().entity("Car Deleted Successfully").build();
 		} catch (Exception e) {
-		    return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();
+			LOGGER.error("Failed to delete Car with id " + id);
+       return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();
 		}
     }
-}
-    
+
+}    
