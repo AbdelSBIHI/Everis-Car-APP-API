@@ -6,7 +6,7 @@
 	<persistence-unit name="car-unit" transaction-type="JTA">
 		
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>com.everis.cars.entity.Car</class>
+		<class>com.everis.entity.Car</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />	        
 	        <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/cars" />

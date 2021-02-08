@@ -2,7 +2,7 @@ package com.everis.boundary;
 
 import java.util.List;
 
-import javax.ejb.EJB;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.*;
@@ -33,6 +33,7 @@ public class CarResources {
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.info("Car's list not found");
+			return Response.status(Status.NOT_FOUND).build();
       }
     }
 
@@ -58,6 +59,7 @@ public class CarResources {
 			return Response.status(Status.CREATED).entity(carService.createCar(car)).build();
 		} catch (Exception e) {
 			LOGGER.error("Failed to create new car");
+			return Response.status(Status.BAD_REQUEST).build();
     }
     }
   
@@ -73,7 +75,7 @@ public class CarResources {
 			return Response.status(Status.OK).entity(newCar).build();
 		} catch (Exception e) {
       LOGGER.error("Error: Car not found!");
-			return Response.status(Status.NOT_FOUND).build();			
+			return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();			
 		}	  
     }
 
