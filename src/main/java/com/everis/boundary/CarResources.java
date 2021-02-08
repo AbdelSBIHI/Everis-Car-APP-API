@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 public class CarResources {
 
     
-    CarService carService;
+    CarService carService = new CarService();
 
     @GET
     public Response getCars() {
@@ -60,13 +60,10 @@ public class CarResources {
 
     @PUT
     @Path("/{id}")
-    public Response updateCar(final @PathParam("id") int id, final Car car) {
+    public Response updateCar(final @PathParam("id") int id) {
     	
     	try {
 			Car newCar = this.carService.getCar(id);
-			newCar.setBrand(car.getBrand());
-			newCar.setCountry(car.getCountry());
-			newCar.setRegistration(car.getRegistration());
 			this.carService.updateCar(newCar);
 			return Response.status(Status.OK).entity(newCar).build();
 		} catch (Exception e) {
