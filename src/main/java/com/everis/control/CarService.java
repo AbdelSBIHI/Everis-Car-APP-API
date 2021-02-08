@@ -6,31 +6,27 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import org.apache.log4j.Logger;
-
 import com.everis.control.CarService;
 import com.everis.entity.Car;
 
 @Stateless
 public class CarService {
-
-    @PersistenceContext(unitName = "postgres")
+  
+    @PersistenceContext(unitName = "car-unit")
     private EntityManager em;
-    
     private final static Logger LOGGER = Logger.getLogger(CarService.class);
 
     /**
      * Method to get a list of Car Entity available
      */
     public List<Car> getCars()
-    {	
-    	LOGGER.info("Getting all Cars' List: ");
-		List<Car> listCars = em.createNamedQuery("Car.findAll", Car.class).getResultList();
-		LOGGER.info("Car's List completed: " + listCars);
-		return listCars;
+    {
+      LOGGER.info("Getting all Cars' List: ");
+      List<Car> listCars = em.createNamedQuery("Car.findAll", Car.class).getResultList();
+      LOGGER.info("Car's List completed: " + listCars);
+      return listCars;
     }
-
     /**
      * Method to get one Car info using its id                             
      */
@@ -40,7 +36,7 @@ public class CarService {
     	Car car = em.createNamedQuery("Car.findById", Car.class).setParameter("id", id).getSingleResult();
     	LOGGER.info("Car selected: " + car);
     	return car;
-    	
+
     }
 
     /**

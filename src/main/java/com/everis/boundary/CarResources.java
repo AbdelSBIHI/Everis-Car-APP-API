@@ -2,7 +2,6 @@ package com.everis.boundary;
 
 import java.util.List;
 
-
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -14,13 +13,13 @@ import com.everis.control.CarService;
 import com.everis.entity.Car;
 
 
+
 @Path("cars")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class CarResources {
 
-    @EJB
-    CarService carService;
+    CarService carService = new CarService() ;
     
     private final static Logger LOGGER = Logger.getLogger(CarResources.class);
 
@@ -34,14 +33,14 @@ public class CarResources {
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.info("Car's list not found");
-			return Response.status(Status.NOT_FOUND).build();
-		}   	
+      }
     }
 
     @GET
     @Path("/{id}")
     public Response getCarById(final @PathParam("id") int id)
     {		
+
     		LOGGER.info("Getting Car by its Id: " + id);
 	    try {
 			return Response.ok().entity(carService.getCar(id)).build();
@@ -59,23 +58,21 @@ public class CarResources {
 			return Response.status(Status.CREATED).entity(carService.createCar(car)).build();
 		} catch (Exception e) {
 			LOGGER.error("Failed to create new car");
-		    return Response.status(Status.BAD_REQUEST).build();
-		}
-	}    
-
+    }
+    }
+  
     @PUT
     @Path("/{id}")
     public Response updateCar(final @PathParam("id") int id) {
     	
-    	LOGGER.info("Update new car!");
-    	
+      LOGGER.info("Update new car!");
     	try {
 			Car newCar = this.carService.getCar(id);
 			this.carService.updateCar(newCar);
-			LOGGER.info("Car Successfully Updated: " + newCar + "Id: " + id);
+      LOGGER.info("Car Successfully Updated: " + newCar + "Id: " + id);
 			return Response.status(Status.OK).entity(newCar).build();
 		} catch (Exception e) {
-			LOGGER.error("Error: Car not found!");
+      LOGGER.error("Error: Car not found!");
 			return Response.status(Status.NOT_FOUND).build();			
 		}	  
     }
@@ -90,8 +87,8 @@ public class CarResources {
 			return Response.ok().entity("Car Deleted Successfully").build();
 		} catch (Exception e) {
 			LOGGER.error("Failed to delete Car with id " + id);
-		    return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();
+       return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();
 		}
     }
-}
-    
+
+}    
