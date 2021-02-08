@@ -27,13 +27,9 @@ public class CarService {
      */
     public Car getCar(int id)
     { 	
-    	Car car = em.createNamedQuery("Car.findById", Car.class).setParameter("id", id).getSingleResult();
-    	if (car != null) { 					
-    	    return car;
+		Car car = em.createNamedQuery("Car.findById", Car.class).setParameter("id", id).getSingleResult();					
+	    return car;
 
-    	} else { 	    
-    	    return new Car();
-    	}
     }
 
     /**
