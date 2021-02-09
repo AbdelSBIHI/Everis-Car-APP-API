@@ -3,6 +3,7 @@ package com.everis.boundary;
 import java.util.List;
 
 
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.*;
@@ -23,6 +24,7 @@ public class CarResources implements ICarResources {
     private final static Logger LOGGER = Logger.getLogger(CarResources.class);
 
     @GET
+    @Override
     public Response getCars() {
     		LOGGER.info("Retrieving Car's List from car service: ");
     	try {
@@ -37,6 +39,7 @@ public class CarResources implements ICarResources {
     }
 
     @GET
+    @Override
     @Path("/{id}")
     public Response getCarById(final @PathParam("id") int id)
     {		
@@ -51,6 +54,7 @@ public class CarResources implements ICarResources {
     }
 
     @POST
+    @Override
     public Response createCar(final Car car) {
     		LOGGER.info("Creating new Car: ");
     	try {
@@ -63,6 +67,7 @@ public class CarResources implements ICarResources {
     }
   
     @PUT
+    @Override
     @Path("/{id}")
     public Response updateCar(final @PathParam("id") int id) {
     	
@@ -79,6 +84,7 @@ public class CarResources implements ICarResources {
     }
 
     @DELETE
+    @Override
     @Path("/{id}")
     public Response deleteCar(final @PathParam("id") int id) {
     		LOGGER.info("Deleting car with id:"+id);

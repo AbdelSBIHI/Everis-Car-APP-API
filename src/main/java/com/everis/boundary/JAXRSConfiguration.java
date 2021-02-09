@@ -10,16 +10,19 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
 import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.integration.OpenApiConfigurationException;
 import io.swagger.v3.oas.integration.SwaggerConfiguration;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
 
 @ApplicationPath("/api")
-public class MyApplication extends Application  {
+@OpenAPIDefinition(info = @Info(title = "Everis-Car-App_API", version = "0.0", description = "Car's CRUD Functionality"))
+public class JAXRSConfiguration extends Application  {
 	
 	@SuppressWarnings("rawtypes")
-	public MyApplication() {
+	public JAXRSConfiguration() {
         super();
         OpenAPI oas = new OpenAPI();
         oas.setServers(null);
