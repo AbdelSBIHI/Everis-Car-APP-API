@@ -27,7 +27,7 @@ public class JAXRSConfiguration extends Application  {
         OpenAPI oas = new OpenAPI();
         oas.setServers(null);
         Server server = new Server();
-        server.setUrl("http://localhost:8080/cars");
+        server.setUrl("http://localhost:8080/car-api");
         
         oas.setServers(Arrays.asList(server));
         SwaggerConfiguration oasConfig = new SwaggerConfiguration()
