@@ -9,7 +9,7 @@ public class IdConverter implements AttributeConverter<UUID, String> {
 	@Override
 	public String convertToDatabaseColumn(UUID attribute) {
 		
-		return attribute.toString();
+		return String.valueOf(attribute);
 	}
 
 	@Override

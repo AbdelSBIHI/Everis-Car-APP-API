@@ -33,7 +33,7 @@ public interface ICarResources {
 
     
     @Operation(description = "Create new car", responses = {
-    	    @ApiResponse(responseCode = "200", description = "Car has been successfully created"),
+    	    @ApiResponse(responseCode = "201", description = "Car has been successfully created"),
     	    @ApiResponse(responseCode = "400", description = "creation of a new car has been failed") })
     @Parameter(description = "Refference of object car to be created", required = true)
     public Response createCar(final Car car); 

@@ -26,7 +26,6 @@ public class Car implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "ID")
-    @NotNull
 	private UUID id;
 	
 	@Column(name = "BRAND")
