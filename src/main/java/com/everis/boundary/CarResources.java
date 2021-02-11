@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.*;
@@ -13,12 +14,14 @@ import javax.ws.rs.core.Response.*;
 import com.everis.boundary.CarResources;
 import com.everis.control.CarService;
 import com.everis.entity.Car;
+import com.everis.utils.LogInterceptor;
 
 
 @Path("/cars")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
+@Interceptors(LogInterceptor.class)
 public class CarResources implements ICarResources {
 
 	@Inject

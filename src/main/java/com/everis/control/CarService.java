@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import com.everis.control.CarService;
 import com.everis.entity.Car;
+import com.everis.utils.LogInterceptor;
 
 @Stateless
+@Interceptors(LogInterceptor.class)
 public class CarService {
   
     @PersistenceContext(unitName = "car-unit")

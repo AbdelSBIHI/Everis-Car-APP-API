@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 
 @Interceptor
-public class LogsInterceptor {
+public class LogInterceptor {
 
 	
 	@AroundInvoke
