@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import javax.persistence.AttributeConverter;
 
-public class IdConverter implements AttributeConverter<UUID, String> {
+public class UUIDConverter implements AttributeConverter<UUID, String> {
 
 	@Override
 	public String convertToDatabaseColumn(UUID attribute) {

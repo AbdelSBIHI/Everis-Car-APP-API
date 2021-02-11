@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  *
  */
 @Entity
-@IdClass(Pk.class)
+@IdClass(CarPk.class)
 @Table(name = "car")
 @NamedQueries(value = {
 		@NamedQuery(name = "Car.findAll", query = "select c from Car c "),

@@ -7,9 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 
 
-import com.everis.utils.IdConverter;
+import com.everis.utils.UUIDConverter;
 
-public class Pk implements Serializable{
+public class CarPk implements Serializable{
 	
 
 	/**
@@ -17,7 +17,7 @@ public class Pk implements Serializable{
 	 */
 	private static final long serialVersionUID = -1924858706276850371L;
 	@Column(name = "ID")
-    @Convert(converter = IdConverter.class)
+    @Convert(converter = UUIDConverter.class)
 	private UUID id;
 	@Override
 	public int hashCode() {
@@ -34,7 +34,7 @@ public class Pk implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pk other = (Pk) obj;
+		CarPk other = (CarPk) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
