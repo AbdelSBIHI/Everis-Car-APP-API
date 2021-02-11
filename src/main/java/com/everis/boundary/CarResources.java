@@ -1,8 +1,10 @@
 package com.everis.boundary;
 
 import java.util.List;
+import java.util.UUID;
 
-
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.*;
@@ -13,17 +15,19 @@ import com.everis.control.CarService;
 import com.everis.entity.Car;
 
 
-
-@Path("cars")
+@Path("/cars")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class CarResources {
+@RequestScoped
+public class CarResources implements ICarResources {
 
-    CarService carService = new CarService() ;
+	@Inject
+    CarService carService  ;
     
     private final static Logger LOGGER = Logger.getLogger(CarResources.class);
 
     @GET
+    @Override
     public Response getCars() {
     		LOGGER.info("Retrieving Car's List from car service: ");
     	try {
@@ -38,8 +42,9 @@ public class CarResources {
     }
 
     @GET
+    @Override
     @Path("/{id}")
-    public Response getCarById(final @PathParam("id") int id)
+    public Response getCarById(final @PathParam("id") UUID id)
     {		
 
     		LOGGER.info("Getting Car by its Id: " + id);
@@ -52,6 +57,7 @@ public class CarResources {
     }
 
     @POST
+    @Override
     public Response createCar(final Car car) {
     		LOGGER.info("Creating new Car: ");
     	try {
@@ -64,8 +70,9 @@ public class CarResources {
     }
   
     @PUT
+    @Override
     @Path("/{id}")
-    public Response updateCar(final @PathParam("id") int id) {
+    public Response updateCar(final @PathParam("id") UUID id) {
     	
       LOGGER.info("Update new car!");
     	try {
@@ -80,8 +87,9 @@ public class CarResources {
     }
 
     @DELETE
+    @Override
     @Path("/{id}")
-    public Response deleteCar(final @PathParam("id") int id) {
+    public Response deleteCar(final @PathParam("id") UUID id) {
     		LOGGER.info("Deleting car with id:"+id);
 	    try {
 			this.carService.deleteCar(id);

@@ -2,6 +2,7 @@ package com.everis.control;
 
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -30,7 +31,7 @@ public class CarService {
     /**
      * Method to get one Car info using its id                             
      */
-    public Car getCar(int id)
+    public Car getCar(UUID id)
     {
     	LOGGER.info("Getting Car by it Id... ");
     	Car car = em.createNamedQuery("Car.findById", Car.class).setParameter("id", id).getSingleResult();
@@ -64,7 +65,7 @@ public class CarService {
      * Method to delete Car using its id
      *
      */
-    public void deleteCar(int id)
+    public void deleteCar(UUID id)
     {
     	LOGGER.info("Deleting Car... ");
     	final Car car = getCar(id);

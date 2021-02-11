@@ -2,18 +2,18 @@ package com.everis.entity;
 
 import java.io.Serializable;
 
+
 import java.lang.String;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
-
 /**
  * Entity implementation class for Entity: Car
  *
  */
 @Entity
+@IdClass(CarPk.class)
 @Table(name = "car")
 @NamedQueries(value = {
 		@NamedQuery(name = "Car.findAll", query = "select c from Car c "),
@@ -26,7 +26,6 @@ public class Car implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "ID")
-    @NotNull
 	private UUID id;
 	
 	@Column(name = "BRAND")
