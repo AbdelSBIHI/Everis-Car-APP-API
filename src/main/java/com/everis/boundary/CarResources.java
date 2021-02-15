@@ -1,5 +1,6 @@
 package com.everis.boundary;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -14,6 +15,7 @@ import org.apache.log4j.Logger;
 import com.everis.boundary.CarResources;
 import com.everis.control.CarService;
 import com.everis.entity.Car;
+import com.everis.utils.ValidatorUtil;
 
 
 @Path("/cars")
@@ -60,13 +62,14 @@ public class CarResources implements ICarResources {
     @POST
     @Override
     public Response createCar(final Car car) {
+    	final ArrayList<String> Errors = ValidatorUtil.validate(car);
     		LOGGER.info("Creating new Car: ");
     	try {
 			LOGGER.info("new car created: "+car);
 			return Response.status(Status.CREATED).entity(carService.createCar(car)).build();
 		} catch (Exception e) {
 			LOGGER.error("Failed to create new car");
-			return Response.status(Status.BAD_REQUEST).build();
+			return Response.status(Status.BAD_REQUEST).entity(Errors).build();
     }
     }
   
@@ -75,15 +78,24 @@ public class CarResources implements ICarResources {
     @Path("/{id}")
     public Response updateCar(final @PathParam("id") String id , final Car car) {
     	
-      LOGGER.info("Update new car!");
-    	try {
-			this.carService.updateCar(id,car);
-      LOGGER.info("Car Successfully Updated: " + car + "Id: " + id);
-			return Response.status(Status.OK).entity(car).build();
-		} catch (Exception e) {
-      LOGGER.error("Error: Car not found!");
-			return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();			
-		}	  
+    	car.setId(id);
+    	final ArrayList<String> validatorsErrors = ValidatorUtil.validate(car);
+    	
+    	LOGGER.info("Validating Car's info: " + car);
+    	if (validatorsErrors.isEmpty()) {
+    	    try {
+    		carService.updateCar(id, car);
+    		LOGGER.info("Car Successfully Updated: " + car + "Id: " + id);
+    		return Response.ok().entity(car).build();
+    	    } catch (Exception e) {
+    		LOGGER.error("Car with id " + id + " Not Found");
+    		return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();
+    	    }
+
+    	} else {
+    	    LOGGER.error("Failed to update car with id " + id);
+    	    return Response.status(Status.BAD_REQUEST).entity(validatorsErrors).build();
+    	}  
     }
 
     @DELETE
