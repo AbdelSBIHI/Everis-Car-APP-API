@@ -1,29 +1,38 @@
 package com.everis.utils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+
+import com.everis.boundary.ErrorDto;
 
 @Provider
 public class CarExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
 
 	@Override
 	public Response toResponse(ConstraintViolationException exception) {
-		// TODO Auto-generated method stub
+		
 		return Response.status(Response.Status.BAD_REQUEST)
                 .entity(prepareMessage(exception))
-                .type("application/json ")
+                .type(MediaType.APPLICATION_JSON)
                 .build();
 	}
 	
-	  private String prepareMessage(ConstraintViolationException exception) {
-	      String msg = "";
+	  private ErrorDto prepareMessage(ConstraintViolationException exception) {
+	      List<String> msg = new ArrayList<String>(); 
 	      for (ConstraintViolation<?> cv : exception.getConstraintViolations()) {
-	          msg+=cv.getPropertyPath()+" "+cv.getMessage()+"\n";
+	          msg.add(cv.getMessage());
 	      }
-	      return msg;
+	      return new ErrorDto(msg);
 	  }
 
 }
