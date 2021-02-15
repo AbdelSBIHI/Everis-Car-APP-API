@@ -7,6 +7,7 @@ import java.lang.String;
 import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -21,6 +22,7 @@ import org.hibernate.annotations.GenericGenerator;
 		@NamedQuery(name = "Car.findById", query = "select c from Car c where c.id = :id"),
 	}
 )
+@XmlRootElement
 public class Car implements Serializable {
 
 	   

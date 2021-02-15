@@ -296,11 +296,12 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"no car found with give id\", function () {\r",
-							"\tpm.response.to.have.status(204);\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"\tpm.response.to.have.status(404);\r",
 							"});\r",
-							"pm.test(\"Body matches string\", function () {\r",
-							"\tpm.expect(pm.response.text()).empty;\r",
+							"pm.test(\"car not found with the given id\", function () {\r",
+							"\tpm.expect(pm.response.text()).to.include(\"Car with id 0 not found\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -375,7 +376,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "delete car do not exist",
 			"event": [
 				{
 					"listen": "test",
