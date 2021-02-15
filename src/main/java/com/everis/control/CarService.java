@@ -56,7 +56,7 @@ public class CarService {
      * Method to update Car using its id
      * @throws ParseException 
      */
-    public Car updateCar(String id,Car car) throws ParseException
+    public Car updateCar(String id,Car car) 
     {
     	LOGGER.info("Updating Car...");
     	em.merge(car);
