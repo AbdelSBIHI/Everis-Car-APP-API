@@ -5,15 +5,16 @@ import java.io.Serializable;
 
 import java.lang.String;
 import java.util.Date;
-import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.GenericGenerator;
+
 /**
  * Entity implementation class for Entity: Car
  *
  */
 @Entity
-@IdClass(CarPk.class)
 @Table(name = "car")
 @NamedQueries(value = {
 		@NamedQuery(name = "Car.findAll", query = "select c from Car c "),
@@ -24,9 +25,10 @@ public class Car implements Serializable {
 
 	   
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GenericGenerator(name = "UUID", strategy = "uuid2")
+	@GeneratedValue(generator = "UUID")
 	@Column(name = "ID")
-	private UUID id;
+	private String id;
 	
 	@Column(name = "BRAND")
     @NotNull(message = "Brand can't be null")
@@ -52,11 +54,11 @@ public class Car implements Serializable {
 	public Car() {
 		super();
 	}   
-	public UUID getId() {
+	public String getId() {
 		return this.id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}   
 	public String getBrand() {

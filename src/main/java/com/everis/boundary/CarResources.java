@@ -1,7 +1,8 @@
 package com.everis.boundary;
 
 import java.util.List;
-import java.util.UUID;
+
+
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -44,7 +45,7 @@ public class CarResources implements ICarResources {
     @GET
     @Override
     @Path("/{id}")
-    public Response getCarById(final @PathParam("id") UUID id)
+    public Response getCarById(final @PathParam("id") String id)
     {		
 
     		LOGGER.info("Getting Car by its Id: " + id);
@@ -52,7 +53,7 @@ public class CarResources implements ICarResources {
 			return Response.ok().entity(carService.getCar(id)).build();
 		} catch (Exception e) {
 			LOGGER.error("Car with id : " + id + " Not Found");
-			 return Response.status(Status.NOT_FOUND).build();
+			 return Response.status(Status.NO_CONTENT).build();
 		}
     }
 
@@ -72,14 +73,13 @@ public class CarResources implements ICarResources {
     @PUT
     @Override
     @Path("/{id}")
-    public Response updateCar(final @PathParam("id") UUID id) {
+    public Response updateCar(final @PathParam("id") String id , final Car car) {
     	
       LOGGER.info("Update new car!");
     	try {
-			Car newCar = this.carService.getCar(id);
-			this.carService.updateCar(newCar);
-      LOGGER.info("Car Successfully Updated: " + newCar + "Id: " + id);
-			return Response.status(Status.OK).entity(newCar).build();
+			this.carService.updateCar(id,car);
+      LOGGER.info("Car Successfully Updated: " + car + "Id: " + id);
+			return Response.status(Status.OK).entity(car).build();
 		} catch (Exception e) {
       LOGGER.error("Error: Car not found!");
 			return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();			
@@ -89,7 +89,7 @@ public class CarResources implements ICarResources {
     @DELETE
     @Override
     @Path("/{id}")
-    public Response deleteCar(final @PathParam("id") UUID id) {
+    public Response deleteCar(final @PathParam("id") String id) {
     		LOGGER.info("Deleting car with id:"+id);
 	    try {
 			this.carService.deleteCar(id);

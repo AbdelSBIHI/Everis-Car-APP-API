@@ -2,8 +2,6 @@ package com.everis.boundary;
 
 
 
-import java.util.UUID;
-
 import javax.ws.rs.core.Response;
 import com.everis.entity.Car;
 
@@ -28,7 +26,7 @@ public interface ICarResources {
     	    @ApiResponse(responseCode = "200", description = "Returns a Car by its id"),
     	    @ApiResponse(responseCode = "404", description = "Car with given id doesn't exists") })
     @Parameter(description = "Refference of Car's Id selected by the user", required = true)
-    public Response getCarById(final UUID id);
+    public Response getCarById(final String id);
     
 
     
@@ -46,13 +44,13 @@ public interface ICarResources {
     	    @ApiResponse(responseCode = "404", description = "Car with given id doesn't exists") } )
         @Parameter(description = "Refference of Car's id to be updated", required = true)
         @Parameter(description = "Refference of Object Car to be updated", required = true)
-    public Response updateCar(final UUID id);
+    public Response updateCar(final String id ,final Car car);
     
     @Operation(description = "Delete existing car", responses = {
     	    @ApiResponse(responseCode = "200", description = "Car has been successfully deleted"),
     	    @ApiResponse(responseCode = "404", description = "Car with given id doesn't exists") } )
     @Parameter(description = "Refference of Car's id selected by the user", required = true)
-    public Response deleteCar(final  UUID id); 
+    public Response deleteCar(final  String id); 
 
 
 }

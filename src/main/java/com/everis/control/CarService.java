@@ -1,8 +1,8 @@
 package com.everis.control;
 
 
+import java.text.ParseException;
 import java.util.List;
-import java.util.UUID;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -21,7 +21,8 @@ public class CarService {
     /**
      * Method to get a list of Car Entity available
      */
-    public List<Car> getCars()
+   
+	public List<Car> getCars()
     {
       LOGGER.info("Getting all Cars' List: ");
       List<Car> listCars = em.createNamedQuery("Car.findAll", Car.class).getResultList();
@@ -30,8 +31,9 @@ public class CarService {
     }
     /**
      * Method to get one Car info using its id                             
+     * @throws ParseException 
      */
-    public Car getCar(UUID id)
+    public Car getCar(String id) throws ParseException
     {
     	LOGGER.info("Getting Car by it Id... ");
     	Car car = em.createNamedQuery("Car.findById", Car.class).setParameter("id", id).getSingleResult();
@@ -52,8 +54,9 @@ public class CarService {
     }
     /**
      * Method to update Car using its id
+     * @throws ParseException 
      */
-    public Car updateCar(Car car)
+    public Car updateCar(String id,Car car) throws ParseException
     {
     	LOGGER.info("Updating Car...");
     	em.merge(car);
@@ -63,9 +66,10 @@ public class CarService {
    
     /**
      * Method to delete Car using its id
+     * @throws ParseException 
      *
      */
-    public void deleteCar(UUID id)
+    public void deleteCar(String id) throws ParseException
     {
     	LOGGER.info("Deleting Car... ");
     	final Car car = getCar(id);
