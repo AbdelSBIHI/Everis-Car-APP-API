@@ -1,16 +1,12 @@
 package com.everis.boundary;
 
-import java.text.ParseException;
+
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.ws.rs.*;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.*;
 
