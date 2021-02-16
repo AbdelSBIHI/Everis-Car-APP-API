@@ -2,13 +2,16 @@ package com.everis.control;
 
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+
 import com.everis.control.CarService;
 import com.everis.entity.Car;
 
 @Stateless
 public class CarService {
-
-	private CarDao carDao = new CarDao();
+	
+	@Inject
+	private CarDao carDao;
 
 	/**
 	 * Method to get a list of Car Entity available
