@@ -60,7 +60,7 @@ public class CarDaoTest {
 		doNothing().when(entityManager).persist(any(Car.class));	
 		Car createdCar = carDao.addCar(car);	
 		assertEquals(car,createdCar);
-		;
+		
 	}
 
 	@Test
