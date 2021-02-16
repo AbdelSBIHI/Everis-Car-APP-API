@@ -28,14 +28,11 @@ public class CarServiceTest {
 	@Test
 	public void testGetCars() {
 
-		try {
-			final List<Car> allcars = new ArrayList<>();
-			Mockito.when(carDao.findAll()).thenReturn(allcars);
-			final List<Car> cars = carService.getCars();
-			Assert.assertEquals(allcars, cars);
-		} catch (Exception e) {
-			Assert.fail();
-		}
+		final List<Car> allcars = new ArrayList<>();
+		Mockito.when(carDao.findAll()).thenReturn(allcars);
+		final List<Car> cars = carService.getCars();
+		Assert.assertEquals(allcars, cars);
+
 	}
 
 	@Test
@@ -43,53 +40,40 @@ public class CarServiceTest {
 
 		final Car oneCar = new Car();
 
-		try {
-			Mockito.when(carDao.findOne("f6cf16d4-6b91-11eb-9439-0242ac130002")).thenReturn(oneCar);
-			final Car car = carService.getCar("f6cf16d4-6b91-11eb-9439-0242ac130002");
-			Assert.assertNotNull(oneCar);
-			Assert.assertEquals(oneCar, car);
-		} catch (Exception e) {
-			Assert.fail();
-		}
+		Mockito.when(carDao.findOne("f6cf16d4-6b91-11eb-9439-0242ac130002")).thenReturn(oneCar);
+		final Car car = carService.getCar("f6cf16d4-6b91-11eb-9439-0242ac130002");
+		Assert.assertNotNull(oneCar);
+		Assert.assertEquals(oneCar, car);
+
 	}
 
 	@Test
 	public void testCreateCar() {
 
-		try {
-			final Car car = new Car("BMW", new Date(), "Germany");
-			Mockito.when(carDao.addCar(car)).thenReturn(car);
-			final Car newCar = carService.createCar(car);
-			Assert.assertEquals(car, newCar);
-		} catch (Exception e) {
-			Assert.fail();
-		}
+		final Car car = new Car("BMW", new Date(), "Germany");
+		Mockito.when(carDao.addCar(car)).thenReturn(car);
+		final Car newCar = carService.createCar(car);
+		Assert.assertEquals(car, newCar);
 
 	}
 
 	@Test
 	public void testUpdateCar() {
-		try {
-			Car car = new Car("BMW", new Date(), "Germany");
-			String id = "f6cf16d4-6b91-11eb-9439-0242ac130002";
-			Mockito.when(carDao.editCar(id, car)).thenReturn(car);
-			Car updatedCar = carService.updateCar(id, car);
-			Assert.assertEquals(car, updatedCar);
-		} catch (Exception e) {
-			Assert.fail();
 
-		}
+		Car car = new Car("BMW", new Date(), "Germany");
+		String id = "f6cf16d4-6b91-11eb-9439-0242ac130002";
+		Mockito.when(carDao.editCar(id, car)).thenReturn(car);
+		Car updatedCar = carService.updateCar(id, car);
+		Assert.assertEquals(car, updatedCar);
+
 	}
 
 	@Test
 	public void testDeleteCar() {
 
-		try {
-			Mockito.when(carDao.deleteCar(Mockito.anyString())).thenReturn(true);
-			assertTrue(carService.deleteCar(Mockito.anyString()));
-		} catch (Exception e) {
-			Assert.fail();
-		}
+		Mockito.when(carDao.deleteCar(Mockito.anyString())).thenReturn(true);
+		assertTrue(carService.deleteCar(Mockito.anyString()));
+
 	}
 
 }
