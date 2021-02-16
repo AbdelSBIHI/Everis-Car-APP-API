@@ -56,6 +56,15 @@ public class Car implements Serializable {
 	public Car() {
 		super();
 	}   
+	
+	public Car(@NotNull(message = "Brand can't be null") String brand, Date registration,
+			@NotNull(message = "Country can't be null") String country) {
+		super();
+		this.brand = brand;
+		this.registration = registration;
+		this.country = country;
+	}
+
 	public String getId() {
 		return this.id;
 	}

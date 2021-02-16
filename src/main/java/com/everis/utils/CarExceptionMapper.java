@@ -1,10 +1,7 @@
 package com.everis.utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
