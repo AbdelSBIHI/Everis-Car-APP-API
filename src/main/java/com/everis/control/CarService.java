@@ -7,74 +7,58 @@ import javax.inject.Inject;
 import com.everis.control.CarService;
 import com.everis.entity.Car;
 
-/**
- * @author AbdelSBIHI
- *  
- */
 @Stateless
 public class CarService {
 
 	@Inject
-	private CarDao carDao;
+	private PersistenceService<Car, String> persistenceService;
 
 	/**
-	 * get a list of Car available
-	 * 
-	 * @return list of cars
+	 * Method to get a list of Car Entity available
 	 */
 
 	public List<Car> getCars() {
-		List<Car> listCars = carDao.findAll();
-		return listCars;
+
+		return this.persistenceService.getEntitiesWithNamedQuery("Car.findAll", Car.class);
 	}
 
 	/**
-	 * get one Car info using its id
+	 * Method to get one Car info using its id
 	 * 
-	 * @param id id of the car
-	 * @return a Car if the car exists, null if not
 	 */
 	public Car getCar(String id) {
-		Car car = carDao.findOne(id);
+
+		Car car = this.persistenceService.getEntityByID(Car.class, id);
 		return car;
 
 	}
 
 	/**
-	 * create Car
-	 * 
-	 * @param car object contains information of the car the we want to create
-	 * @return Car: the saved car
+	 * Method to create Car
 	 */
 	public Car createCar(final Car car) {
-		carDao.addCar(car);
-		return car;
+
+		return this.persistenceService.persistEntity(car);
+
 	}
 
 	/**
-	 * update Car using its id
-	 * 
-	 * @param car contains the new info of an existing car
-	 * @return Car :a car with new informations
+	 * Method to update Car using its id
 	 */
 	public Car updateCar(String id, Car car) {
-		carDao.editCar(id, car);
-		return car;
+
+		return this.persistenceService.mergeEntity(car);
 	}
 
 	/**
-	 * delete Car using its id
-	 * 
-	 * @param id: the id of the card we want to delete
-	 * @return true if the car deleted, false if not
+	 * Method to delete Car using its id
+	 *
 	 */
 	public Boolean deleteCar(String id) {
-		try {
-			carDao.deleteCar(id);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+
+		Car car = this.getCar(id);
+		return this.persistenceService.deleteEntity(car);
+
 	}
 
 }

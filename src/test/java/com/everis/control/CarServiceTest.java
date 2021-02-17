@@ -1,6 +1,6 @@
 package com.everis.control;
 
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,13 +23,13 @@ public class CarServiceTest {
 	CarService carService;
 
 	@Mock
-	private CarDao carDao;
+	private PersistenceService<Car, String> carPersistenceService;
 
 	@Test
 	public void testGetCars() {
 
 		final List<Car> allcars = new ArrayList<>();
-		Mockito.when(carDao.findAll()).thenReturn(allcars);
+		Mockito.when(carPersistenceService.getEntitiesWithNamedQuery("Car.findAll", Car.class)).thenReturn(allcars);
 		final List<Car> cars = carService.getCars();
 		Assert.assertEquals(allcars, cars);
 
@@ -40,7 +40,7 @@ public class CarServiceTest {
 
 		final Car oneCar = new Car();
 
-		Mockito.when(carDao.findOne("f6cf16d4-6b91-11eb-9439-0242ac130002")).thenReturn(oneCar);
+		Mockito.when(carPersistenceService.getEntityByID(Car.class,"f6cf16d4-6b91-11eb-9439-0242ac130002")).thenReturn(oneCar);
 		final Car car = carService.getCar("f6cf16d4-6b91-11eb-9439-0242ac130002");
 		Assert.assertNotNull(oneCar);
 		Assert.assertEquals(oneCar, car);
@@ -51,7 +51,7 @@ public class CarServiceTest {
 	public void testCreateCar() {
 
 		final Car car = new Car("BMW", new Date(), "Germany");
-		Mockito.when(carDao.addCar(car)).thenReturn(car);
+		Mockito.when(carPersistenceService.persistEntity(car)).thenReturn(car);
 		final Car newCar = carService.createCar(car);
 		Assert.assertEquals(car, newCar);
 
@@ -62,17 +62,21 @@ public class CarServiceTest {
 
 		Car car = new Car("BMW", new Date(), "Germany");
 		String id = "f6cf16d4-6b91-11eb-9439-0242ac130002";
-		Mockito.when(carDao.editCar(id, car)).thenReturn(car);
+		Mockito.when(carPersistenceService.mergeEntity(car)).thenReturn(car);
 		Car updatedCar = carService.updateCar(id, car);
 		Assert.assertEquals(car, updatedCar);
 
 	}
 
+	
 	@Test
 	public void testDeleteCar() {
-
-		Mockito.when(carDao.deleteCar(Mockito.anyString())).thenReturn(true);
-		assertTrue(carService.deleteCar(Mockito.anyString()));
+		Car car = new Car("BMW", new Date(), "Germany");
+		String id = "f6cf16d4-6b91-11eb-9439-0242ac130002";
+		
+		when(this.carPersistenceService.getEntityByID(Car.class, id)).thenReturn(car);
+		this.carService.deleteCar(id);
+		Mockito.verify(this.carPersistenceService, Mockito.times(1)).deleteEntity(car);
 
 	}
 

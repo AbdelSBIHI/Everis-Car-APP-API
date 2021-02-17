@@ -1,27 +1,27 @@
 package com.everis.boundary;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.everis.control.CarService;
 import com.everis.entity.Car;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CarResourcesTest {
 
 	@InjectMocks
@@ -32,34 +32,29 @@ public class CarResourcesTest {
 
 	private Car car;
 
+	private String carId = "f6cf16d4-6b91-11eb-9439-0242ac130002";
+
 	@Before
 	public void setUp() throws Exception {
-		car = new Car("bmw", new Date(), "germany");
-		car.setId("e72fd0a4-f7a5-42d4-908e-7bc1dc62f857");
-	}
-
-	@Test
-	public void testCreateCar() {
-		doNothing().when(carService).createCar(car);
-		Response responseTest = this.carResource.createCar(car);
-		assertEquals(Status.CREATED.getStatusCode(), responseTest.getStatus());
-		assertEquals(car, responseTest.getEntity());
+		car = new Car();
+		car.setId(carId);
+		car.setBrand("Renault");
+		car.setCountry("France");
 
 	}
 
 	@Test
-	public void testGetCars() {
-
+	public void getCarsTest() {
+		when(this.carService.getCars()).thenReturn(new ArrayList<Car>());
 		List<Car> expectedCars = new ArrayList<Car>();
-		when(this.carService.getCars()).thenReturn(expectedCars);
 		Response responseTest = this.carResource.getCars();
 		assertEquals(expectedCars, responseTest.getEntity());
 		assertEquals(Status.OK.getStatusCode(), responseTest.getStatus());
-
 	}
 
 	@Test
-	public void testGetCarById() {
+	public void getCarByIdWithValidID() {
+
 		when(this.carService.getCar(car.getId())).thenReturn(car);
 		Response response = this.carResource.getCarById(car.getId());
 		assertEquals(car, response.getEntity());
@@ -68,64 +63,72 @@ public class CarResourcesTest {
 	}
 
 	@Test
-	public void testUpdateCar() {
+	public void createCarrWithValidValues() {
+
+		when(this.carService.createCar(car)).thenReturn(car);
+		Response responseTest = this.carResource.createCar(car);
+		assertEquals(car, responseTest.getEntity());
+		assertEquals(Status.CREATED.getStatusCode(), responseTest.getStatus());
+
+	}
+
+	@Test
+	public void updateCarWithValidID() {
+
 		String brand = "Renault";
-		when(this.carService.getCar(car.getId())).thenReturn(car);
 		car.setBrand(brand);
-		doNothing().when(this.carService).updateCar(car.getId(), car);
-		Response response = this.carResource.updateCar(car.getId(), car);
+		when(this.carService.updateCar(carId, car)).thenReturn(car);
+		Response response = this.carResource.updateCar(carId, car);
 		assertEquals(car.getBrand(), ((Car) response.getEntity()).getBrand());
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 	}
 
 	@Test
-	public void testDeleteCar() {
+	public void deleteCarCarWithValidID() {
 
-		doNothing().when(this.carService).deleteCar(car.getId());
-		Response response = this.carResource.deleteCar(car.getId());
+		when(this.carService.deleteCar(carId)).thenReturn(true);
+		Response response = this.carResource.deleteCar(carId);
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 	}
 
+
+//	@Test
+//	public void createCarrWithInvalidValues() {
+//
+//		Response response = null;
+//		Car invalidCar = new Car();
+//		invalidCar.setBrand("Renault");
+//		invalidCar.setCountry(null);
+//		when(this.carService.createCar(invalidCar)).thenReturn(invalidCar);
+//		response = this.carResource.createCar(invalidCar);
+//		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+//
+//	}
+
 	@Test
-	public void testCreateCarWithInvalidID() {
-
-		Response response = null;
-		Car carErrors = new Car();
-		carErrors.setId(car.getId());
-		carErrors.setBrand("Renault");
-		carErrors.setCountry(null);
-		doThrow(PersistenceException.class).when(this.carService).createCar(carErrors);
-		response = this.carResource.createCar(carErrors);
-		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-	}
-
-	@Test
-	public void testGetCarByIdWithInvalidID() {
-
-		when(this.carService.getCar(car.getId())).thenThrow(EntityNotFoundException.class);
-		Response response = this.carResource.getCarById(car.getId());
+	public void getCarByIdWithInvalidID() {
+		when(this.carService.getCar(carId)).thenThrow(EntityNotFoundException.class);
+		Response response = this.carResource.getCarById(carId);
 		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}
 
+//	@Test
+//	public void updateCarWithInvalidID() {
+//
+//		String id = "e72fd0a4-f7a5-42d4-908e-7bc1dc62f000";
+//		Response response = null;
+//		when(this.carService.updateCar(id, car)).thenReturn(car);
+//		response = this.carResource.updateCar(id, car);
+//		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+//	}
+
 	@Test
-	public void testUpdateCarWithInvalidID() {
-
-		Response response = null;
-		when(this.carService.getCar(car.getId())).thenReturn(car);
-		doThrow(EntityNotFoundException.class).when(this.carService).updateCar(car.getId(), car);
-		response = this.carResource.updateCar(car.getId(), car);
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-
-	}
-
-	@Test
-	public void testDeleteCarWithInvalidID() {
-
-		doThrow(EntityNotFoundException.class).when(this.carService).deleteCar(car.getId());
-		Response response = this.carResource.deleteCar(car.getId());
+	public void deleteCarCarWithInvalidID() {
+		String id = "e72fd0a4-f7a5-42d4-908e-7bc1dc62f000";
+		doThrow(EntityNotFoundException.class).when(this.carService).deleteCar(id);
+		Response response = this.carResource.deleteCar(id);
 		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}
-
 }
