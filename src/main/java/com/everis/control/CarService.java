@@ -9,25 +9,26 @@ import com.everis.entity.Car;
 
 @Stateless
 public class CarService {
-	
+
 	@Inject
-	private CarDao carDao;
+	private PersistenceService<Car, String> persistenceService;
 
 	/**
 	 * Method to get a list of Car Entity available
 	 */
 
 	public List<Car> getCars() {
-		List<Car> listCars = carDao.findAll();
-		return listCars;
+
+		return this.persistenceService.getEntitiesWithNamedQuery("Car.findAll", Car.class);
 	}
 
 	/**
 	 * Method to get one Car info using its id
 	 * 
 	 */
-	public Car getCar(String id)  {
-		Car car = carDao.findOne(id);
+	public Car getCar(String id) {
+
+		Car car = this.persistenceService.getEntityByID(Car.class, id);
 		return car;
 
 	}
@@ -36,16 +37,17 @@ public class CarService {
 	 * Method to create Car
 	 */
 	public Car createCar(final Car car) {
-		carDao.addCar(car);
-		return car;
+
+		return this.persistenceService.persistEntity(car);
+
 	}
 
 	/**
 	 * Method to update Car using its id
 	 */
 	public Car updateCar(String id, Car car) {
-		carDao.editCar(id, car);
-		return car;
+
+		return this.persistenceService.mergeEntity(car);
 	}
 
 	/**
@@ -53,12 +55,10 @@ public class CarService {
 	 *
 	 */
 	public Boolean deleteCar(String id) {
-		try {
-			carDao.deleteCar(id);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+
+		Car car = this.getCar(id);
+		return this.persistenceService.deleteEntity(car);
+
 	}
 
 }
