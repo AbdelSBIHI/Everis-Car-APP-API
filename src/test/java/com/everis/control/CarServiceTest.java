@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.everis.entity.Car;
+import com.everis.entity.CarDto;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CarServiceTest {
@@ -30,7 +31,7 @@ public class CarServiceTest {
 
 		final List<Car> allcars = new ArrayList<>();
 		Mockito.when(carPersistenceService.getEntitiesWithNamedQuery("Car.findAll", Car.class)).thenReturn(allcars);
-		final List<Car> cars = carService.getCars();
+		final List<CarDto> cars = carService.getCars();
 		Assert.assertEquals(allcars, cars);
 
 	}
@@ -52,7 +53,7 @@ public class CarServiceTest {
 
 		final Car car = new Car("BMW", new Date(), "Germany");
 		Mockito.when(carPersistenceService.persistEntity(car)).thenReturn(car);
-		final Car newCar = carService.createCar(car);
+		final CarDto newCar = carService.createCar(car);
 		Assert.assertEquals(car, newCar);
 
 	}
@@ -63,7 +64,7 @@ public class CarServiceTest {
 		Car car = new Car("BMW", new Date(), "Germany");
 		String id = "f6cf16d4-6b91-11eb-9439-0242ac130002";
 		Mockito.when(carPersistenceService.mergeEntity(car)).thenReturn(car);
-		Car updatedCar = carService.updateCar(id, car);
+		CarDto updatedCar = carService.updateCar(id, car);
 		Assert.assertEquals(car, updatedCar);
 
 	}

@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.everis.control.CarService;
 import com.everis.entity.Car;
+import com.everis.entity.CarDto;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CarResourcesTest {
@@ -45,7 +46,7 @@ public class CarResourcesTest {
 
 	@Test
 	public void getCarsTest() {
-		when(this.carService.getCars()).thenReturn(new ArrayList<Car>());
+		when(this.carService.getCars()).thenReturn(new ArrayList<CarDto>());
 		List<Car> expectedCars = new ArrayList<Car>();
 		Response responseTest = this.carResource.getCars();
 		assertEquals(expectedCars, responseTest.getEntity());
@@ -65,7 +66,7 @@ public class CarResourcesTest {
 	@Test
 	public void createCarrWithValidValues() {
 
-		when(this.carService.createCar(car)).thenReturn(car);
+		when(this.carService.createCar(car)).thenReturn(car.mapToDto());
 		Response responseTest = this.carResource.createCar(car);
 		assertEquals(car, responseTest.getEntity());
 		assertEquals(Status.CREATED.getStatusCode(), responseTest.getStatus());
@@ -77,7 +78,7 @@ public class CarResourcesTest {
 
 		String brand = "Renault";
 		car.setBrand(brand);
-		when(this.carService.updateCar(carId, car)).thenReturn(car);
+		when(this.carService.updateCar(carId, car)).thenReturn(car.mapToDto());
 		Response response = this.carResource.updateCar(carId, car);
 		assertEquals(car.getBrand(), ((Car) response.getEntity()).getBrand());
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
