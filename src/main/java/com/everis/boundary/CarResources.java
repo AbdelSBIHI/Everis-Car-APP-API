@@ -48,7 +48,7 @@ public class CarResources implements ICarResources {
 
 		LOGGER.info("Getting Car by its Id: " + id);
 		try {
-			return Response.ok().entity(CarDto.mapToCardto(carService.getCar(id))).build();
+			return Response.ok().entity(carService.getCar(id).mapToDto()).build();
 		} catch (Exception e) {
 			LOGGER.error("Car with id : " + id + " Not Found");
 			return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();

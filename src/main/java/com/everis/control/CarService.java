@@ -22,7 +22,7 @@ public class CarService {
 
 	public List<CarDto> getCars() {
 		List<CarDto> cars=this.persistenceService.getEntitiesWithNamedQuery("Car.findAll", Car.class).stream().
-				map(car -> CarDto.mapToCardto(car)).collect(Collectors.toList());
+				map(car -> car.mapToDto()).collect(Collectors.toList());
 		return cars;
 	}
 
@@ -42,7 +42,7 @@ public class CarService {
 	 */
 	public CarDto createCar(final Car car) {
 
-		return CarDto.mapToCardto(persistenceService.persistEntity(car));
+		return persistenceService.persistEntity(car).mapToDto();
 
 	}
 
@@ -51,7 +51,7 @@ public class CarService {
 	 */
 	public CarDto updateCar(String id, Car car) {
 		car.setId(id);
-		return CarDto.mapToCardto(this.persistenceService.mergeEntity(car));
+		return this.persistenceService.mergeEntity(car).mapToDto();
 	}
 
 	/**

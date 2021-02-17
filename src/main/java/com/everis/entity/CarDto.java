@@ -2,14 +2,22 @@ package com.everis.entity;
 
 import java.util.Date;
 
+import javax.json.bind.annotation.JsonbDateFormat;
+
+
+import org.modelmapper.ModelMapper;
+
 
 public class CarDto {
 	
 	private String id;
 	private String brand;
 	private String country;
+	@JsonbDateFormat("yyyy-MM-dd hh:mm:ss")
 	private Date createdAt;
+	@JsonbDateFormat("yyyy-MM-dd hh:mm:ss")
 	private Date lastUpdated;
+	@JsonbDateFormat("yyyy-MM-dd hh:mm:ss")
     private Date registration;
 	public String getId() {
 		return id;
@@ -57,11 +65,17 @@ public class CarDto {
 		this.lastUpdated = lastUpdated;
 		this.registration = registration;
 	}
+		
 	
-    public static  CarDto mapToCardto(Car car) {
-    	
-		return new CarDto(car.getId(), car.getBrand(), car.getBrand(), car.getCreatedAt(), car.getLastUpdated(), car.getRegistration());
-    }
+	
+	public Car mapToCar() {
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(this, Car.class);
+	}
+	public CarDto() {
+		
+		
+	}
 	
 
 	

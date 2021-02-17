@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.modelmapper.ModelMapper;
 
 
 /**
@@ -111,7 +112,10 @@ public class Car implements Serializable {
 		this.lastUpdated = lastUpdated;
 	}
 	
-
+	public CarDto mapToDto() {
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(this, CarDto.class);
+	}
    
 }
 
