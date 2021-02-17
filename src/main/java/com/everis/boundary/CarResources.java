@@ -2,7 +2,6 @@ package com.everis.boundary;
 
 
 import java.util.List;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
@@ -14,6 +13,7 @@ import org.apache.log4j.Logger;
 import com.everis.boundary.CarResources;
 import com.everis.control.CarService;
 import com.everis.entity.Car;
+import com.everis.entity.CarDto;
 
 @Path("/cars")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -31,7 +31,7 @@ public class CarResources implements ICarResources {
 	public Response getCars() {
 		LOGGER.info("Retrieving Car's List from car service: ");
 		try {
-			List<Car> cars = carService.getCars();
+			List<CarDto> cars =carService.getCars();
 			LOGGER.info("Car's list retrieved");
 			return Response.ok().entity(cars).build();
 		} catch (Exception e) {
@@ -48,7 +48,7 @@ public class CarResources implements ICarResources {
 
 		LOGGER.info("Getting Car by its Id: " + id);
 		try {
-			return Response.ok().entity(carService.getCar(id)).build();
+			return Response.ok().entity(CarDto.mapToCardto(carService.getCar(id))).build();
 		} catch (Exception e) {
 			LOGGER.error("Car with id : " + id + " Not Found");
 			return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();
@@ -74,12 +74,12 @@ public class CarResources implements ICarResources {
 	@Path("/{id}")
 	public Response updateCar(final @PathParam("id") String id, final Car car) {
 
-		car.setId(id);
+		
 		LOGGER.info("Validating Car's info: " + car);
 		try {
-			carService.updateCar(id, car);
+			CarDto updatedCar=carService.updateCar(id, car);
 			LOGGER.info("Car Successfully Updated: " + car + "Id: " + id);
-			return Response.ok().entity(car).build();
+			return Response.ok().entity(updatedCar).build();
 		} catch (PersistenceException e) {
 			LOGGER.info(" cannot update the car ");
 			throw e;

@@ -3,6 +3,8 @@ package com.everis.entity;
 import java.io.Serializable;
 
 
+
+
 import java.lang.String;
 import java.util.Date;
 import javax.persistence.*;
@@ -10,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.GenericGenerator;
+
 
 /**
  * Entity implementation class for Entity: Car
@@ -107,6 +110,8 @@ public class Car implements Serializable {
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
+	
+
    
 }
 

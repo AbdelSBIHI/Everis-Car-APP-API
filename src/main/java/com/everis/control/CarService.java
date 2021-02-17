@@ -1,11 +1,14 @@
 package com.everis.control;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.everis.control.CarService;
 import com.everis.entity.Car;
+import com.everis.entity.CarDto;
 
 @Stateless
 public class CarService {
@@ -17,9 +20,10 @@ public class CarService {
 	 * Method to get a list of Car Entity available
 	 */
 
-	public List<Car> getCars() {
-
-		return this.persistenceService.getEntitiesWithNamedQuery("Car.findAll", Car.class);
+	public List<CarDto> getCars() {
+		List<CarDto> cars=this.persistenceService.getEntitiesWithNamedQuery("Car.findAll", Car.class).stream().
+				map(car -> CarDto.mapToCardto(car)).collect(Collectors.toList());
+		return cars;
 	}
 
 	/**
@@ -36,18 +40,18 @@ public class CarService {
 	/**
 	 * Method to create Car
 	 */
-	public Car createCar(final Car car) {
+	public CarDto createCar(final Car car) {
 
-		return this.persistenceService.persistEntity(car);
+		return CarDto.mapToCardto(persistenceService.persistEntity(car));
 
 	}
 
 	/**
 	 * Method to update Car using its id
 	 */
-	public Car updateCar(String id, Car car) {
-
-		return this.persistenceService.mergeEntity(car);
+	public CarDto updateCar(String id, Car car) {
+		car.setId(id);
+		return CarDto.mapToCardto(this.persistenceService.mergeEntity(car));
 	}
 
 	/**
