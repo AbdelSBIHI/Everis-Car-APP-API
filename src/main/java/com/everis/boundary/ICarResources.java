@@ -22,7 +22,7 @@ public interface ICarResources {
 	 */
 	@Operation(description = "Get a list of cars")
 	@ApiResponse(responseCode = "200", description = "Returns List of Cars Available")
-	public Response getCars();
+	public Response getCars(int page, int size, String filterBy, String orderBy);
 
 	/**
 	 * Pick a Car by its Id

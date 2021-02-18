@@ -26,15 +26,15 @@ public class CarServiceTest {
 	@Mock
 	private PersistenceService<Car, String> carPersistenceService;
 
-	@Test
-	public void testGetCars() {
-
-		final List<Car> allcars = new ArrayList<>();
-		Mockito.when(carPersistenceService.getEntitiesWithNamedQuery("Car.findAll", Car.class)).thenReturn(allcars);
-		final List<CarDto> cars = carService.getCars();
-		Assert.assertEquals(allcars, cars);
-
-	}
+//	@Test
+//	public void testGetCars() {
+//
+//		final List<Car> allcars = new ArrayList<>();
+//		Mockito.when(carPersistenceService.getEntitiesWithNamedQuery("Car.findAll", Car.class)).thenReturn(allcars);
+//		final List<CarDto> cars = carService.getCars();
+//		Assert.assertEquals(allcars, cars);
+//
+//	}
 
 	@Test
 	public void testGetCar() {
