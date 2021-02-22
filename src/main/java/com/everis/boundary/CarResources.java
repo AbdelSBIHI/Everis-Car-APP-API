@@ -1,8 +1,6 @@
 package com.everis.boundary;
 
 
-import java.util.List;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
@@ -14,6 +12,7 @@ import org.apache.log4j.Logger;
 import com.everis.boundary.CarResources;
 import com.everis.control.CarService;
 import com.everis.entity.CarDto;
+import com.everis.utils.PagesPresentation;
 
 @Path("/cars")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -28,10 +27,14 @@ public class CarResources implements ICarResources {
 
 	@GET
 	@Override
-	public Response getCars() {
+	public Response getCars(@DefaultValue("1") @QueryParam(value = "page") int page,
+			@DefaultValue("5") @QueryParam(value = "size") int size,
+			@DefaultValue("") @QueryParam(value = "filterBy") String filterBy,
+			@QueryParam(value = "orderBy") String orderBy,
+			@QueryParam("sort") @DefaultValue("asc") String sort) {
 		LOGGER.info("Retrieving Car's List from car service: ");
 		try {
-			List<CarDto> cars =carService.getCars();
+			PagesPresentation<CarDto> cars =carService.getCars(page, size, sort, orderBy, filterBy);
 			LOGGER.info("Car's list retrieved");
 			return Response.ok().entity(cars).build();
 		} catch (Exception e) {

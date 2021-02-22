@@ -1,7 +1,5 @@
 package com.everis.control;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -9,6 +7,7 @@ import javax.inject.Inject;
 import com.everis.control.CarService;
 import com.everis.entity.Car;
 import com.everis.entity.CarDto;
+import com.everis.utils.PagesPresentation;
 
 @Stateless
 public class CarService {
@@ -20,12 +19,10 @@ public class CarService {
 	 * Method to get a list of Car Entity available
 	 */
 
-	public List<CarDto> getCars() {
-		List<CarDto> cars=this.persistenceService.getEntitiesWithNamedQuery("Car.findAll", Car.class).stream().
-				map(car -> car.mapToDto()).collect(Collectors.toList());
-		return cars;
+	public PagesPresentation<CarDto> getCars(int page, int size, String sort, String orderBy,String filterBy) {
+		
+		return persistenceService.findCars(size, page, sort, orderBy, filterBy);
 	}
-
 	/**
 	 * Method to get one Car info using its id
 	 * 
