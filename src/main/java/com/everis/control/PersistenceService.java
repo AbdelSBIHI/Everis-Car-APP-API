@@ -29,7 +29,7 @@ public class PersistenceService<T, L> {
 		
 		if(sort == null || sort.trim().isEmpty() || !sort.equalsIgnoreCase("desc")) sort="asc";	
 		if(orderBy == null || orderBy.trim().isEmpty()) orderBy="id";
-		if(page <= 0) page=1;
+		if(page <= 0) page=0;
 		if(size <= 0 || size >= 20) size=10;
 		
 		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
