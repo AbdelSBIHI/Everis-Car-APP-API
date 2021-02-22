@@ -2,6 +2,7 @@ package com.everis.boundary;
 
 
 import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
@@ -12,7 +13,6 @@ import javax.ws.rs.core.Response.*;
 import org.apache.log4j.Logger;
 import com.everis.boundary.CarResources;
 import com.everis.control.CarService;
-import com.everis.entity.Car;
 import com.everis.entity.CarDto;
 
 @Path("/cars")
@@ -57,12 +57,12 @@ public class CarResources implements ICarResources {
 
 	@POST
 	@Override
-	public Response createCar(final Car car) {
+	public Response createCar(final CarDto car) {
 
 		LOGGER.info("Creating new Car: ");
 		try {
 			LOGGER.info("new car created: " + car);
-			return Response.status(Status.CREATED).entity(carService.createCar(car)).build();
+			return Response.status(Status.CREATED).entity(carService.createCar(car.mapToCar())).build();
 		} catch (PersistenceException e) {
 			LOGGER.error("Failed to create new car");
 			throw e;
@@ -72,12 +72,12 @@ public class CarResources implements ICarResources {
 	@PUT
 	@Override
 	@Path("/{id}")
-	public Response updateCar(final @PathParam("id") String id, final Car car) {
+	public Response updateCar(final @PathParam("id") String id, final CarDto car) {
 
 		
 		LOGGER.info("Validating Car's info: " + car);
 		try {
-			CarDto updatedCar=carService.updateCar(id, car);
+			CarDto updatedCar=carService.updateCar(id, car.mapToCar());
 			LOGGER.info("Car Successfully Updated: " + car + "Id: " + id);
 			return Response.ok().entity(updatedCar).build();
 		} catch (PersistenceException e) {

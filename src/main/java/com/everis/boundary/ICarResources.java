@@ -2,9 +2,9 @@ package com.everis.boundary;
 
 import javax.validation.Valid;
 
-import javax.ws.rs.core.Response;
 
-import com.everis.entity.Car;
+import javax.ws.rs.core.Response;
+import com.everis.entity.CarDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -46,7 +46,7 @@ public interface ICarResources {
 			@ApiResponse(responseCode = "201", description = "Car has been successfully created"),
 			@ApiResponse(responseCode = "400", description = "creation of a new car has been failed") })
 	@Parameter(description = "Refference of object car to be created", required = true)
-	public Response createCar(@Valid final Car car);
+	public Response createCar(@Valid final CarDto car);
 
 	/**
 	 * update existing car
@@ -60,7 +60,7 @@ public interface ICarResources {
 			@ApiResponse(responseCode = "404", description = "Car with given id doesn't exists") })
 	@Parameter(description = "Refference of Car's id to be updated", required = true)
 	@Parameter(description = "Refference of Object Car to be updated", required = true)
-	public Response updateCar(final String id, @Valid final Car car);
+	public Response updateCar(final String id, @Valid final CarDto car);
 
 	/**
 	 * delete an existing car
