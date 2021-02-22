@@ -65,7 +65,7 @@ public class CarResourcesTest {
 	public void createCarrWithValidValues() {
 
 		when(this.carService.createCar(car)).thenReturn(car.mapToDto());
-		Response responseTest = this.carResource.createCar(car);
+		Response responseTest = this.carResource.createCar(car.mapToDto());
 		assertEquals(car, responseTest.getEntity());
 		assertEquals(Status.CREATED.getStatusCode(), responseTest.getStatus());
 
@@ -77,7 +77,7 @@ public class CarResourcesTest {
 		String brand = "Renault";
 		car.setBrand(brand);
 		when(this.carService.updateCar(carId, car)).thenReturn(car.mapToDto());
-		Response response = this.carResource.updateCar(carId, car);
+		Response response = this.carResource.updateCar(carId, car.mapToDto());
 		assertEquals(car.getBrand(), ((Car) response.getEntity()).getBrand());
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
