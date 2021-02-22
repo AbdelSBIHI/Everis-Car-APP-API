@@ -1,8 +1,8 @@
 package com.everis.control;
 
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -10,46 +10,66 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
+import com.everis.entity.Car;
+import com.everis.entity.CarDto;
+import com.everis.utils.PagesPresentation;
 
 @Stateless
 public class PersistenceService<T, L> {
 
 	@PersistenceContext(unitName = "car-unit")
 	private EntityManager em;
-
-	public TypedQuery<T> getEntitiesQuery(Class<T> c, Map<String, String> filterMap, String orderBy) {
-
+	
+	
+	
+	public PagesPresentation<CarDto> findCars(int size, int page, String sort, String orderBy, String filterBy) {
+		
+		if(sort == null || sort.trim().isEmpty() || !sort.equalsIgnoreCase("desc")) sort="asc";	
+		if(orderBy == null || orderBy.trim().isEmpty()) orderBy="id";
+		if(page <= 0) page=1;
+		if(size <= 0 || size >= 20) size=10;
+		
 		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-		CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(c);
-		Root<T> root = criteriaQuery.from(c);
-		criteriaQuery.select(root);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		CriteriaQuery<Car> criteriaQuery = criteriaBuilder.createQuery(Car.class);
+		CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
 
-		for (Map.Entry<String, String> entry : filterMap.entrySet()) {
-			Expression<String> expression = criteriaBuilder.lower(root.get(entry.getKey()).as(String.class));
-			String value = String.format("%%%s%%", entry.getValue().toLowerCase());
-			predicates.add(criteriaBuilder.like(expression, value));
+		Root<Car> root = criteriaQuery.from(Car.class);
+		
+        countQuery.select(criteriaBuilder.count(countQuery.from(Car.class)));
+        
+		if (filterBy != null) {
+			Predicate brandPredict = criteriaBuilder.like(root.get("brand"), "%" + filterBy + "%");
+			Predicate countryPredict = criteriaBuilder.like(root.get("country"), "%" + filterBy + "%");
+			Predicate mergePredicates = criteriaBuilder.or(brandPredict, countryPredict);
+			criteriaQuery.where(mergePredicates).distinct(true);
+			countQuery.where(mergePredicates).distinct(true);
 		}
 
-		Predicate predicate = criteriaBuilder.or(predicates.toArray(new Predicate[0]));
-		criteriaQuery.where(predicate);
+		if(sort == "asc")
+			criteriaQuery.orderBy(criteriaBuilder.asc(root.get(orderBy)));
+		else
+			criteriaQuery.orderBy(criteriaBuilder.asc(root.get(orderBy)));
 
-		if (orderBy != null && !orderBy.isEmpty()) {
-			if (orderBy.charAt(0) == '-') {
-				criteriaQuery.orderBy(criteriaBuilder.desc(root.get(orderBy.substring(1))));
-			} else {
-				criteriaQuery.orderBy(criteriaBuilder.asc(root.get(orderBy)));
-			}
-		}
+		TypedQuery<Car> createQuery = em.createQuery(criteriaQuery);
 
-		TypedQuery<T> query = this.em.createQuery(criteriaQuery);
+		// count total elements
+		Long total = em.createQuery(countQuery).getSingleResult();
 
-		return query;
+		createQuery.setMaxResults(size);
+		createQuery.setFirstResult(page * size);
+
+		List<Car> resultList = createQuery.getResultList();
+		List<CarDto> data = resultList.stream().map(c -> c.mapToDto()).collect(Collectors.toList());
+		PagesPresentation<CarDto> pagesPresentation = new PagesPresentation<CarDto>(data,total.intValue(), size, page,
+			 sort, orderBy);
+		return pagesPresentation;
 	}
+	
+	
 
 	public T getEntityByID(Class<T> c, L id) {
 		return this.em.find(c, id);

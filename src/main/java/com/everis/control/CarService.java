@@ -1,39 +1,27 @@
 package com.everis.control;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.TypedQuery;
 
 import com.everis.control.CarService;
 import com.everis.entity.Car;
 import com.everis.entity.CarDto;
+import com.everis.utils.PagesPresentation;
 
 @Stateless
 public class CarService {
 
 	@Inject
 	private PersistenceService<Car, String> persistenceService;
-	
-	private Map<String, String> filterMap = new HashMap<String, String>();
 
 	/**
 	 * Method to get a list of Car Entity available
 	 */
 
-	public List<CarDto> getCars(int page, int size, String filterBy, String orderBy) {
+	public PagesPresentation<CarDto> getCars(int page, int size, String sort, String orderBy,String filterBy) {
 		
-		filterMap.put("brand", filterBy);
-		filterMap.put("country", filterBy);
-		filterMap.put("registration", filterBy);
-		TypedQuery<Car> query = this.persistenceService.getEntitiesQuery(Car.class, filterMap, orderBy);
-		query.setFirstResult((size * page) - size);
-		query.setMaxResults(size);
-		return query.getResultList().stream().map(car -> car.mapToDto()).collect(Collectors.toList());
+		return persistenceService.findCars(size, page, sort, orderBy, filterBy);
 	}
 	/**
 	 * Method to get one Car info using its id

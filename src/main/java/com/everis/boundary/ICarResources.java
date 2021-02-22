@@ -22,7 +22,11 @@ public interface ICarResources {
 	 */
 	@Operation(description = "Get a list of cars")
 	@ApiResponse(responseCode = "200", description = "Returns List of Cars Available")
-	public Response getCars(int page, int size, String filterBy, String orderBy);
+	@Parameter(description = "number of pages", required = false)
+	@Parameter(description = "size of data to present in one page", required = false)
+	@Parameter(description = "value to be searched in the data", required = false)
+	@Parameter(description = "how data will be sorted asc or desc", required = false)
+	public Response getCars(int page, int size, String filterBy, String orderBy,String sort);
 
 	/**
 	 * Pick a Car by its Id
