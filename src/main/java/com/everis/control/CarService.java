@@ -2,6 +2,7 @@ package com.everis.control;
 
 
 import javax.ejb.Stateless;
+
 import javax.inject.Inject;
 
 import com.everis.control.CarService;
@@ -39,7 +40,7 @@ public class CarService {
 	 */
 	public CarDto createCar(final Car car) {
 
-		return persistenceService.persistEntity(car).mapToDto();
+		return CarDto.MapToCarDto(persistenceService.persistEntity(car));
 
 	}
 
@@ -48,7 +49,7 @@ public class CarService {
 	 */
 	public CarDto updateCar(String id, Car car) {
 		car.setId(id);
-		return this.persistenceService.mergeEntity(car).mapToDto();
+		return CarDto.MapToCarDto(this.persistenceService.mergeEntity(car));
 	}
 
 	/**
