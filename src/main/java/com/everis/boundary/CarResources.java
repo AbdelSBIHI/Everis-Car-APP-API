@@ -2,6 +2,7 @@ package com.everis.boundary;
 
 
 import javax.enterprise.context.RequestScoped;
+
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.ws.rs.*;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.Response.*;
 import org.apache.log4j.Logger;
 import com.everis.boundary.CarResources;
 import com.everis.control.CarService;
+import com.everis.entity.Car;
 import com.everis.entity.CarDto;
 import com.everis.utils.PagesPresentation;
 
@@ -51,7 +53,7 @@ public class CarResources implements ICarResources {
 
 		LOGGER.info("Getting Car by its Id: " + id);
 		try {
-			return Response.ok().entity(carService.getCar(id).mapToDto()).build();
+			return Response.ok().entity(CarDto.MapToCarDto(carService.getCar(id))).build();
 		} catch (Exception e) {
 			LOGGER.error("Car with id : " + id + " Not Found");
 			return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();
@@ -60,12 +62,12 @@ public class CarResources implements ICarResources {
 
 	@POST
 	@Override
-	public Response createCar(final CarDto car) {
+	public Response createCar(final CarDto cardto) {
 
 		LOGGER.info("Creating new Car: ");
 		try {
-			LOGGER.info("new car created: " + car);
-			return Response.status(Status.CREATED).entity(carService.createCar(car.mapToCar())).build();
+			LOGGER.info("new car created: " + cardto);
+			return Response.status(Status.CREATED).entity(carService.createCar(Car.MapToCar(cardto))).build();
 		} catch (PersistenceException e) {
 			LOGGER.error("Failed to create new car");
 			throw e;
@@ -75,13 +77,13 @@ public class CarResources implements ICarResources {
 	@PUT
 	@Override
 	@Path("/{id}")
-	public Response updateCar(final @PathParam("id") String id, final CarDto car) {
+	public Response updateCar(final @PathParam("id") String id, final CarDto cardto) {
 
 		
-		LOGGER.info("Validating Car's info: " + car);
+		LOGGER.info("Validating Car's info: " + cardto);
 		try {
-			CarDto updatedCar=carService.updateCar(id, car.mapToCar());
-			LOGGER.info("Car Successfully Updated: " + car + "Id: " + id);
+			CarDto updatedCar=carService.updateCar(id, Car.MapToCar(cardto));
+			LOGGER.info("Car Successfully Updated: " + cardto + "Id: " + id);
 			return Response.ok().entity(updatedCar).build();
 		} catch (PersistenceException e) {
 			LOGGER.info(" cannot update the car ");

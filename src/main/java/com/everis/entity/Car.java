@@ -2,18 +2,12 @@ package com.everis.entity;
 
 import java.io.Serializable;
 
-
-
-
 import java.lang.String;
 import java.util.Date;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.modelmapper.ModelMapper;
-
 
 /**
  * Entity implementation class for Entity: Car
@@ -21,52 +15,40 @@ import org.modelmapper.ModelMapper;
  */
 @Entity
 @Table(name = "car")
-@NamedQueries(value = {
-		@NamedQuery(name = "Car.findAll", query = "select c from Car c "),
-		@NamedQuery(name = "Car.findById", query = "select c from Car c where c.id = :id"),
-	}
-)
+@NamedQueries(value = { @NamedQuery(name = "Car.findAll", query = "select c from Car c "),
+		@NamedQuery(name = "Car.findById", query = "select c from Car c where c.id = :id"), })
 @XmlRootElement
 public class Car implements Serializable {
 
-	   
 	@Id
 	@GenericGenerator(name = "UUID", strategy = "uuid2")
 	@GeneratedValue(generator = "UUID")
 	@Column(name = "ID")
 	private String id;
-	
-	@Column(name = "BRAND")
-    @NotNull(message = "Brand can't be null")
-	private String brand;
-	
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "brand_id", nullable = false)
+	private Brand brand;
+
 	@Column(name = "REGISTRATION")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date registration;
-	
-	@Column(name = "COUNTRY")
-    @NotNull(message = "Country can't be null")
-	private String country;
-	
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "country_id", nullable = false)
+	private Country country;
+
 	@Column(name = "CREATED_AT")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdAt;
-	
+
 	@Column(name = "LAST_UPDATED")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdated;
 	private static final long serialVersionUID = 1L;
 
 	public Car() {
-		super();
-	}   
-	
-	public Car(@NotNull(message = "Brand can't be null") String brand, Date registration,
-			@NotNull(message = "Country can't be null") String country) {
-		super();
-		this.brand = brand;
-		this.registration = registration;
-		this.country = country;
+
 	}
 
 	public String getId() {
@@ -75,35 +57,40 @@ public class Car implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
-	}   
-	public String getBrand() {
-		return this.brand;
 	}
 
-	public void setBrand(String brand) {
+	public Brand getBrand() {
+		return brand;
+	}
+
+	public void setBrand(Brand brand) {
 		this.brand = brand;
-	}   
+	}
+
 	public Date getRegistration() {
 		return this.registration;
 	}
 
 	public void setRegistration(Date registration) {
 		this.registration = registration;
-	}   
-	public String getCountry() {
-		return this.country;
 	}
 
-	public void setCountry(String country) {
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
 		this.country = country;
-	}   
+	}
+
 	public Date getCreatedAt() {
 		return this.createdAt;
 	}
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
-	}   
+	}
+
 	public Date getLastUpdated() {
 		return this.lastUpdated;
 	}
@@ -112,10 +99,15 @@ public class Car implements Serializable {
 		this.lastUpdated = lastUpdated;
 	}
 	
-	public CarDto mapToDto() {
-		ModelMapper modelMapper = new ModelMapper();
-		return modelMapper.map(this, CarDto.class);
+	static public Car MapToCar(CarDto carDto) {
+		Car car= new Car();
+		car.setId(car.getId());
+		car.setCreatedAt(car.getCreatedAt());
+		car.setLastUpdated(car.getLastUpdated());
+		car.setBrand(new Brand(carDto.getBrand()));
+		car.setCountry(new Country(carDto.getCountry()));
+		car.setRegistration(car.getRegistration());
+		return car;
 	}
-   
-}
 
+}
