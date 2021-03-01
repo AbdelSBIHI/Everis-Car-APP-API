@@ -1,10 +1,14 @@
-package com.everis.utils;
+package com.everis.jms;
 
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.everis.control.CarService;
 import com.everis.entity.Car;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,20 +28,21 @@ public class CarMessageListener implements MessageListener {
 	@Inject
 	CarService carService;
 	
+	private static Logger logger = LoggerFactory.getLogger(CarMessagePublisher.class);
 	
 	@Override
 	public void onMessage(Message message) {
 
 		try {
-		    System.out.println("Message received: " + message.getBody(String.class));
+		    logger.info("Message received: " + message.getBody(String.class));
 		    ObjectMapper objectMapper = new ObjectMapper();
 		    Car car = objectMapper.readValue(message.getBody(String.class), Car.class);
-		    System.out.println("Parsed car: " + car);
+		    logger.info("Parsed car: " + car);
 		    carService.updateCar(car.getId(),car);
-		    System.out.println("Created Car: " + car);
+		    logger.info("Created Car: " + car);
 		    
 		} catch (JMSException | IOException e) {
-		    e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
