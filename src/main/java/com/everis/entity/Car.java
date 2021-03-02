@@ -5,8 +5,10 @@ import java.io.Serializable;
 import java.lang.String;
 import java.util.Date;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -16,7 +18,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "car")
 @NamedQueries(value = { @NamedQuery(name = "Car.findAll", query = "select c from Car c "),
-		@NamedQuery(name = "Car.findById", query = "select c from Car c where c.id = :id"), })
+		@NamedQuery(name = "Car.findById", query = "select c from Car c where c.id = :id"),
+		@NamedQuery(name = "Car.findCarsToBeDeleted", query = "select c from Car c where c.toBeDeleted = true")})
 @XmlRootElement
 public class Car implements Serializable {
 
@@ -45,7 +48,23 @@ public class Car implements Serializable {
 	@Column(name = "LAST_UPDATED")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdated;
+	
+	@NotNull
+	@Column(name = "toBeDeleted")
+	@ColumnDefault("false")
+	private boolean toBeDeleted;
+	
 	private static final long serialVersionUID = 1L;
+	
+	
+
+	public boolean isToBeDeleted() {
+		return toBeDeleted;
+	}
+
+	public void setToBeDeleted(boolean toBeDeleted) {
+		this.toBeDeleted = toBeDeleted;
+	}
 
 	public Car() {
 
