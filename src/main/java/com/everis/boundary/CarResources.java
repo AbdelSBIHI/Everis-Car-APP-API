@@ -86,10 +86,9 @@ public class CarResources implements ICarResources {
 		LOGGER.info("Validating Car's info: " + cardto);
 		try {
 			
-			CarDto updatedCar=carService.updateCar(id, Car.MapToCar(cardto));
 			carMessagePublisher.carEditionJms(Car.MapToCar(cardto));
 			LOGGER.info("Car Successfully Updated: " + cardto + "Id: " + id);
-			return Response.ok().entity(updatedCar).build();
+			return Response.ok().entity(cardto).build();
 		} catch (PersistenceException e) {
 			LOGGER.info(" cannot update the car ");
 			throw e;
