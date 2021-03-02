@@ -14,6 +14,7 @@ import com.everis.boundary.CarResources;
 import com.everis.control.CarService;
 import com.everis.entity.Car;
 import com.everis.entity.CarDto;
+import com.everis.jms.CarMessagePublisher;
 import com.everis.utils.PagesPresentation;
 
 @Path("/cars")
@@ -24,6 +25,8 @@ public class CarResources implements ICarResources {
 
 	@Inject
 	CarService carService;
+	@Inject
+	CarMessagePublisher carMessagePublisher;
 
 	private final static Logger LOGGER = Logger.getLogger(CarResources.class);
 
@@ -82,9 +85,10 @@ public class CarResources implements ICarResources {
 		
 		LOGGER.info("Validating Car's info: " + cardto);
 		try {
-			CarDto updatedCar=carService.updateCar(id, Car.MapToCar(cardto));
+			
+			carMessagePublisher.carEditionJms(Car.MapToCar(cardto));
 			LOGGER.info("Car Successfully Updated: " + cardto + "Id: " + id);
-			return Response.ok().entity(updatedCar).build();
+			return Response.ok().entity(cardto).build();
 		} catch (PersistenceException e) {
 			LOGGER.info(" cannot update the car ");
 			throw e;
