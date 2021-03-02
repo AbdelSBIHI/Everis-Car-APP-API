@@ -102,7 +102,7 @@ public class CarResources implements ICarResources {
 	public Response deleteCar(final @PathParam("id") String id) {
 		LOGGER.info("Deleting car with id:" + id);
 		try {
-			this.carService.deleteCar(id);
+			this.carService.softDeleteCar(id);
 			LOGGER.info("Car with id " + id + " Deleted");
 			return Response.ok().entity("Car Deleted Successfully").build();
 		} catch (Exception e) {
