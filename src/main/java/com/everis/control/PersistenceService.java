@@ -13,8 +13,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.everis.entity.Brand;
 import com.everis.entity.Car;
 import com.everis.entity.CarDto;
+import com.everis.entity.Country;
 import com.everis.utils.PagesPresentation;
 
 @Stateless
@@ -107,6 +109,21 @@ public class PersistenceService<T, L> {
    	return listDeletedCars;
    	
     }
+    
+    public Car MapToCar(CarDto carDto) {
+      	 
+		Car car= new Car();
+		Brand brand =em.createNamedQuery("Brand.findByName", Brand.class).setParameter("name", carDto.getBrand()).getSingleResult();
+		Country country =em.createNamedQuery("Country.findByName", Country.class).setParameter("name", carDto.getCountry()).getSingleResult();
+		car.setId(car.getId());
+		car.setCreatedAt(car.getCreatedAt());
+		car.setLastUpdated(car.getLastUpdated());
+		car.setBrand(brand);
+		car.setCountry(country);
+		car.setRegistration(car.getRegistration());
+		
+		return car;
+	}
 
 
 }

@@ -55,12 +55,11 @@ public class CarResources implements ICarResources {
 	public Response getCarById(final @PathParam("id") String id) {
 
 		LOGGER.info("Getting Car by its Id: " + id);
-		try {
-			return Response.ok().entity(CarDto.MapToCarDto(carService.getCar(id))).build();
-		} catch (Exception e) {
-			LOGGER.error("Car with id : " + id + " Not Found");
-			return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();
-		}
+		
+			Car car=this.carService.getCar(id);
+			CarDto cardto = CarDto.MapToCarDto(car);
+			return Response.ok().entity(cardto).build();
+		
 	}
 
 	@POST
@@ -70,7 +69,7 @@ public class CarResources implements ICarResources {
 		LOGGER.info("Creating new Car: ");
 		try {
 			LOGGER.info("new car created: " + cardto);
-			return Response.status(Status.CREATED).entity(carService.createCar(Car.MapToCar(cardto))).build();
+			return Response.status(Status.CREATED).entity(carService.createCar(cardto)).build();
 		} catch (PersistenceException e) {
 			LOGGER.error("Failed to create new car");
 			throw e;
@@ -104,7 +103,7 @@ public class CarResources implements ICarResources {
 		try {
 			this.carService.softDeleteCar(id);
 			LOGGER.info("Car with id " + id + " Deleted");
-			return Response.ok().entity("Car Deleted Successfully").build();
+			return Response.ok().build();
 		} catch (Exception e) {
 			LOGGER.error("Failed to delete Car with id " + id);
 			return Response.status(Status.NOT_FOUND).entity("Car with id " + id + " not found").build();

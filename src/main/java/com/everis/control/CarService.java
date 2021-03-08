@@ -42,9 +42,9 @@ public class CarService {
 	/**
 	 * Method to create Car
 	 */
-	public CarDto createCar(final Car car) {
+	public CarDto createCar(final CarDto car) {
 
-		return CarDto.MapToCarDto(persistenceService.persistEntity(car));
+		return CarDto.MapToCarDto(persistenceService.persistEntity(persistenceService.MapToCar(car)));
 
 	}
 

@@ -65,7 +65,7 @@ public class CarResourcesTest {
 	@Test
 	public void createCarrWithValidValues() {
 
-		when(this.carService.createCar(car)).thenReturn(CarDto.MapToCarDto(car) );
+		when(this.carService.createCar(CarDto.MapToCarDto(car))).thenReturn(CarDto.MapToCarDto(car) );
 		Response responseTest = this.carResource.createCar(CarDto.MapToCarDto(car));
 		assertEquals(car, responseTest.getEntity());
 		assertEquals(Status.CREATED.getStatusCode(), responseTest.getStatus());

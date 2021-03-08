@@ -29,7 +29,7 @@ public class Car implements Serializable {
 	@Column(name = "ID")
 	private String id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "brand_id", nullable = false)
 	private Brand brand;
 
@@ -37,7 +37,7 @@ public class Car implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date registration;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "country_id", nullable = false)
 	private Country country;
 
