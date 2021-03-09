@@ -126,8 +126,7 @@
     
     <failOnMissingWebXml>false</failOnMissingWebXml>  
     
-    <package.file>${project.build.directory}/${app.name}-service.jar</package.file>
-    <packaging.type>runnable</packaging.type>
+    
     
 </properties>
 
