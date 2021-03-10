@@ -117,6 +117,12 @@
     <type>pom</type>
     <scope>provided</scope>
 </dependency>
+
+<dependency>
+			<groupId>fish.payara.extras</groupId>
+			<artifactId>payara-micro</artifactId>
+			<version>5.201</version>
+		</dependency>
   
   </dependencies>
   
