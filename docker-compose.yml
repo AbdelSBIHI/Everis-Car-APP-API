@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+   car-api:
+      build: .
+      ports:
+         - 8080:8080
+      depends_on:
+         - db
+      environment:
+         DB_HOST_NAME: db
+         DB_PORT: 5432
+         DB_NAME: postgres
+         DB_USER: postgres
+         DB_PASSWORD: 123456
+   db:
+      image: postgres
+      restart: always
+      ports:
+        - 5432:5432
+      environment:
+         POSTGRES_DB: postgres
+         POSTGRES_USER: postgres
+         POSTGRES_PASSWORD: 123456
+   nginx:
+      image: everis-Car-App
+      ports:
+         - 80:80
