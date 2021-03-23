@@ -1,1 +1,1 @@
-java -jar lib/payara-micro-4.1.2.174.jar --deploy target/car-api-microbundle.jar --port 8080
+java -jar lib/microprofile-rest-client-api-1.3.2 --deploy target/car-api-microbundle.jar --port 8080

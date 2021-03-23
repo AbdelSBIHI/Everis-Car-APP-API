@@ -1,0 +1,45 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: java-ee-kubernetes
+spec:
+  replicas: 2
+  selector: 
+    matchLabels:
+      app: car-api
+  template:
+    metadata:
+      labels:
+        app: car-api
+    spec:
+      containers:
+        - name: car-api
+          image: localhost:5000/car-api
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 45
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 45
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: car-api
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 31000
+  selector:
+    app: car-api
