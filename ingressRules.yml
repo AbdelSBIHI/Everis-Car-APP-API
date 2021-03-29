@@ -1,0 +1,17 @@
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: cheese
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: trainingauto.com/api
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: trainingauto
+          servicePort: http
+ 
